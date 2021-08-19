@@ -32,21 +32,13 @@ namespace AppOwnsData.Services
             {
                 // Create a public client to authorize the app with the AAD app
                 IPublicClientApplication clientApp = PublicClientApplicationBuilder.Create(_azureAd.Value.ClientId).WithAuthority(_azureAd.Value.AuthorityUri).Build();
-                var userAccounts = clientApp.GetAccountsAsync().Result;
-                try
+
+                SecureString password = new SecureString();
+                foreach (var key in _azureAd.Value.PbiPassword)
                 {
-                    // Retrieve Access token from cache if available
-                    authenticationResult = clientApp.AcquireTokenSilent(_azureAd.Value.Scope, userAccounts.FirstOrDefault()).ExecuteAsync().Result;
+                    password.AppendChar(key);
                 }
-                catch (MsalUiRequiredException)
-                {
-                    SecureString password = new SecureString();
-                    foreach (var key in _azureAd.Value.PbiPassword)
-                    {
-                        password.AppendChar(key);
-                    }
-                    authenticationResult = clientApp.AcquireTokenByUsernamePassword(_azureAd.Value.Scope, _azureAd.Value.PbiUsername, password).ExecuteAsync().Result;
-                }
+                authenticationResult = clientApp.AcquireTokenByUsernamePassword(_azureAd.Value.Scope, _azureAd.Value.PbiUsername, password).ExecuteAsync().Result;
             }
 
             // Service Principal auth is the recommended by Microsoft to achieve App Owns Data Power BI embedding
