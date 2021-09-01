@@ -1,6 +1,6 @@
-﻿@model AppOwnsData.Models.DashboardEmbedConfig
+﻿@model AppOwnsData.Models.ReportEmbedConfig
     <style>
-        #dashboardContainer {
+        #reportContainer {
             width: 900px;
             height: 600px;
             max-width: 100%;
@@ -13,12 +13,12 @@
         }
     </style>
 
-    <h2>Embedded Dashboard</h2>
+    <h2>Embedded Report</h2>
     <div id="Title">
         Ag Dev
     </div>
 
-    <div id="dashboardContainer"></div>
+    <div id="reportContainer"></div>
 
     <script src="~/js/powerbi.min.js"></script>
     <script src="~/js/jquery-3.6.0.min.js"></script>
@@ -29,8 +29,8 @@
     // Read embed URL from Model
     var embedUrl = "@Html.Raw(Model.EmbedUrl)";
 
-    // Read dashboard Id from Model
-    var embedDashboardId = "@Model.DashboardId";
+    // Read ReportId from Model
+    var embedReportId = "@Model.ReportId";
 
     // Use the token expiry to regenerate Embed token for seamless end user experience
     // Refer https://aka.ms/RefreshEmbedToken
@@ -44,18 +44,18 @@
     // This also includes settings and options such as filters.
     // You can find more information at https://docs.microsoft.com/en-us/javascript/api/overview/powerbi/embed-dashboard
     var config = {
-        type: 'dashboard',
+        type: 'report',
         tokenType: models.TokenType.Embed,
         accessToken: accessToken,
         embedUrl: embedUrl,
-        id: embedDashboardId,
+        id: embedReportId,
         pageView: 'fitToWidth'
     };
 
     // Get a reference to the embedded report HTML element
-    var dashboardContainer = $('#dashboardContainer')[0];
+    var reportContainer = $('#reportContainer')[0];
 
     // Embed the report and display it within the div container.
-    powerbi.embed(dashboardContainer, config);
+    powerbi.embed(reportContainer, config);
 
     </script>

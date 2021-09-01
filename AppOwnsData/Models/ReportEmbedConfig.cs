@@ -3,9 +3,9 @@ using System;
 
 namespace AppOwnsData.Models
 {
-    public class DashboardEmbedConfig
+    public class ReportEmbedConfig
     {
-        public Guid DashboardId { get; set; }
+        public Guid ReportId { get; set; }
 
         public string EmbedUrl { get; set; }
 

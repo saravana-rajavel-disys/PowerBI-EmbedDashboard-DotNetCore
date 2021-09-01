@@ -33,42 +33,45 @@ namespace AppOwnsData.Services
         }
 
         /// <summary>
-        /// Get embed params for a dashboard
+        /// Get embed params for a report
         /// </summary>
-        /// <returns>Wrapper object containing Embed token, Embed URL for single dashboard</returns>
-        public DashboardEmbedConfig EmbedDashboard(Guid workspaceId)
+        /// <returns>Wrapper object containing Embed token, Embed URL for single report</returns>
+        public ReportEmbedConfig EmbedReport(Guid workspaceId)
         {
             PowerBIClient pbiClient = GetPowerBIClient();
 
-            // Get a list of dashboards.
-            var dashboards = pbiClient.Dashboards.GetDashboardsInGroupAsync(workspaceId).Result;
+            // Get a list of reports
+            var reports = pbiClient.Reports.GetReportsInGroupAsync(workspaceId).Result;
 
-            // Get the first report in the workspace.
-            var dashboard = dashboards.Value.FirstOrDefault();
+            var reportName = "Horticulture Crop Coverage";
 
-            if (dashboard == null)
+            // Get the report in the workspace
+            var report = reports.Value.Where(x => x.Name == reportName).FirstOrDefault();
+
+            if (report == null)
             {
-                throw new NullReferenceException("Workspace has no dashboards");
+                throw new NullReferenceException("Workspace has no reports");
             }
 
-            // Generate Embed Token.
+            // Generate Embed Token
             var generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "view");
-            var tokenResponse = pbiClient.Dashboards.GenerateTokenInGroupAsync(workspaceId, dashboard.Id, generateTokenRequestParameters);
+
+            var tokenResponse = pbiClient.Reports.GenerateTokenInGroupAsync(workspaceId, report.Id, generateTokenRequestParameters);
 
             if (tokenResponse == null)
             {
                 throw new NullReferenceException("Failed to generate embed token");
             }
 
-            // Generate Embed Configuration.
-            var dashboardEmbedConfig = new DashboardEmbedConfig
+            // Generate Embed Configuration
+            var reportEmbedConfig = new ReportEmbedConfig
             {
                 EmbedToken = tokenResponse.Result,
-                EmbedUrl = dashboard.EmbedUrl,
-                DashboardId = dashboard.Id
+                EmbedUrl = report.EmbedUrl,
+                ReportId = report.Id
             };
 
-            return dashboardEmbedConfig;
+            return reportEmbedConfig;
         }
     }
 }

@@ -27,10 +27,10 @@ namespace AppOwnsData.Controllers
         /// </summary>
         /// <returns>JSON containing parameters for embedding</returns>
         [HttpGet]
-        public ActionResult EmbedDashboard()
+        public ActionResult EmbedReport()
         {
-            DashboardEmbedConfig dashboard = _pbiEmbedService.EmbedDashboard(new Guid(_powerBI.Value.WorkspaceId));
-            return View(dashboard);
+            ReportEmbedConfig report = _pbiEmbedService.EmbedReport(new Guid(_powerBI.Value.WorkspaceId));
+            return View(report);
         }
     }
 }

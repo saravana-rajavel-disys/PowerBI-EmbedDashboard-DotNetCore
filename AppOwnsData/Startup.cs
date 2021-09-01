@@ -60,7 +60,7 @@ namespace AppOwnsData
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=EmbedInfo}/{action=EmbedDashboard}/{id?}");
+                    pattern: "{controller=EmbedInfo}/{action=EmbedReport}/{id?}");
             });
         }
     }
